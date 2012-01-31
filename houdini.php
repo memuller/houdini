@@ -26,13 +26,20 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-function destroy_tags($text, $tags = array('style', 'script', 'iframe', 'object', 'embed', 'applet', 'noscript', 'noembed', 'noframes')){
-	$needles = array() ;
+function destroy_tags($text, $warning_to_trigger = "Houdini: Prevented dangerous tag from being echoed." ){
+	$needles = array() ; $num_matches = 0 ;
+	$tags = array('style', 'script', 'iframe', 'object', 'embed', 'applet', 
+			'noscript', 'noembed', 'noframes')  ; 
+
 	foreach ($tags as $tag) {
 		$needles[]= "@<".$tag."[^>]*?>.*?</".$tag.">@siu" ;
 	}
 
-	$text = preg_replace($needles, "", $text) ;	
+	$text = preg_replace($needles, "", $text, -1, $num_matches) ;
+	
+	if($num_matches){
+		trigger_error($warning_to_trigger, E_USER_WARNING) ;
+	}	
 	return $text;	
 }
 
@@ -40,7 +47,7 @@ function houdini_post_save_filter($data, $postarr){
 	$fields = array('content', 'title', 'excerpt') ;
 	foreach ( $fields as $field) {
 		$field = "post_" . $field ;
-		$data[$field] = destroy_tags($data[$field]) ;
+		$data[$field] = destroy_tags($data[$field], "Houdini: Prevented dangerous tag from being saved on post ". $data['ID']) ;
 	}
 	return $data ; 
 }
