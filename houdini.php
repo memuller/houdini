@@ -36,6 +36,16 @@ function destroy_tags($text, $tags = array('style', 'script', 'iframe', 'object'
 	return $text;	
 }
 
+function houdini_post_save_filter($data, $postarr){
+	$fields = array('content', 'title', 'excerpt') ;
+	foreach ( $fields as $field) {
+		$field = "post_" . $field ;
+		$data[$field] = destroy_tags($data[$field]) ;
+	}
+	return $data ; 
+}
+
+add_filter('wp_insert_post_data', 'houdini_post_save_filter', 99, 2) ;
 add_filter('the_title', 'destroy_tags') ;
 add_filter('the_content', 'destroy_tags') ;
 add_filter('the_author', 'destroy_tags') ;
