@@ -26,26 +26,16 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-function destroy_tags($text, $tags = array('style', 'script', 'iframe', 'object', 'embed', 'applet', 'noscript', 'noembed', 'noframes')){
-	$needles = array() ;
-	foreach ($tags as $tag) {
-		$needles[]= "@<".$tag."[^>]*?>.*?</".$tag.">@siu" ;
-	}
+require "vendors/htmlpurifier/library/HTMLPurifier.standalone.php" ;
+require "models/Escape.php" ;
 
-	$text = preg_replace($needles, "", $text) ;	
-	return $text;	
+function destroy_tags($string){
+	return new Houdini\Escape($string) ;
 }
 
-function houdini_post_save_filter($data, $postarr){
-	$fields = array('content', 'title', 'excerpt') ;
-	foreach ( $fields as $field) {
-		$field = "post_" . $field ;
-		$data[$field] = destroy_tags($data[$field]) ;
-	}
-	return $data ; 
-}
-
-add_filter('wp_insert_post_data', 'houdini_post_save_filter', 99, 2) ;
+add_filter('title_save_pre', 'destroy_tags') ;
+add_filter('content_save_pre', 'destroy_tags');
+add_filter('excerpt_save_pre', 'destroy_tags') ;
 add_filter('the_title', 'destroy_tags') ;
 add_filter('the_content', 'destroy_tags') ;
 add_filter('the_author', 'destroy_tags') ;
