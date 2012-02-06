@@ -15,11 +15,10 @@
 
 		public static $tags_whitelist ; 
 
-		public $purified ; 
 
-		function __construct($string){
+		function common($string){
 			if(! isset(static::$purifier)) self::build_purifier() ;
-			$this->purified = self::$purifier->purify($string) ;
+			return self::$purifier->purify($string) ;
 		}
 
 		function __toString(){

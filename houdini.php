@@ -33,10 +33,10 @@ function destroy_tags($string){
 	return new Houdini\Escape($string) ;
 }
 
-add_filter('title_save_pre', 'destroy_tags') ;
-add_filter('content_save_pre', 'destroy_tags');
-add_filter('excerpt_save_pre', 'destroy_tags') ;
-add_filter('the_title', 'destroy_tags') ;
-add_filter('the_content', 'destroy_tags') ;
-add_filter('the_author', 'destroy_tags') ;
+add_filter('title_save_pre', array('Houdini\Escape', 'common')) ;
+add_filter('content_save_pre', array('Houdini\Escape', 'common'));
+add_filter('excerpt_save_pre', array('Houdini\Escape', 'common')) ;
+add_filter('the_title', array('Houdini\Escape', 'common')) ;
+add_filter('the_content', array('Houdini\Escape', 'common')) ;
+add_filter('the_author', array('Houdini\Escape', 'common')) ;
  ?>
