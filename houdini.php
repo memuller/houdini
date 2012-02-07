@@ -26,12 +26,13 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-require "vendors/htmlpurifier/library/HTMLPurifier.standalone.php" ;
-require "models/Escape.php" ;
+$plugin_path = plugin_dir_path(__FILE__) ;
 
-function destroy_tags($string){
-	return new Houdini\Escape($string) ;
-}
+require 'vendors/htmlpurifier/library/HTMLPurifier.standalone.php' ;
+require 'vendors/haml/HamlParser.class.php' ;
+require 'models/Escape.php' ;
+require 'lib/Presenter.php' ;
+require 'presenters/Options.php' ;
 
 add_filter('title_save_pre', array('Houdini\Escape', 'common')) ;
 add_filter('content_save_pre', array('Houdini\Escape', 'common'));
@@ -39,4 +40,10 @@ add_filter('excerpt_save_pre', array('Houdini\Escape', 'common')) ;
 add_filter('the_title', array('Houdini\Escape', 'common')) ;
 add_filter('the_content', array('Houdini\Escape', 'common')) ;
 add_filter('the_author', array('Houdini\Escape', 'common')) ;
- ?>
+
+function houdini_options_menu(){
+	add_submenu_page( 'options-general.php', 'Houdini Settings', 'Houdini', 'edit_posts', 'houdini', 'Houdini\OptionsPresenter::present'  );
+}
+add_action( 'admin_menu', 'houdini_options_menu' ) ;
+
+?>
