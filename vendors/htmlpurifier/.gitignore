@@ -3,8 +3,6 @@ conf/
 test-settings.php
 config-schema.php
 library/HTMLPurifier/DefinitionCache/Serializer/*/
-library/standalone/
-library/HTMLPurifier.standalone.php
 library/HTMLPurifier*.tgz
 library/package*.xml
 smoketests/test-schema.html
