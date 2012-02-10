@@ -1,4 +1,4 @@
-<?php 
+<?php
 	/*
 	Plugin Name: Houdini
 	Version: 0.0.1
@@ -36,10 +36,8 @@
 	require 'presenters/Options.php' ;
 
 	add_filter('title_save_pre', array('Houdini\Escape', 'common')) ;
-	add_filter('content_save_pre', array('Houdini\Escape', 'common'));
 	add_filter('excerpt_save_pre', array('Houdini\Escape', 'common')) ;
 	add_filter('the_title', array('Houdini\Escape', 'common')) ;
-	add_filter('the_content', array('Houdini\Escape', 'common')) ;
 	add_filter('the_author', array('Houdini\Escape', 'common')) ;
 
 	function houdini_options_menu(){
